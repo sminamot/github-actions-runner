@@ -1,0 +1,38 @@
+name: Publish Docker image by tag
+on:
+  push:
+    tags:
+      - v*
+jobs:
+  docker:
+    name: Docker build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: crazy-max/ghaction-docker-buildx@v3
+        with:
+          buildx-version: latest
+          qemu-version: latest
+
+      - name: Login DockerHub
+        run: |
+          echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ github.repository_owner }} --password-stdin
+
+      # use tag for image_tag, example:'v1.2.3' -> '1.2.3'
+      - name: Set image tag
+        run: |
+          IMAGE_TAG=${GITHUB_REF##*/v}
+          echo ::set-env name=IMAGE_TAG::${IMAGE_TAG}
+
+      - name: Build and Publish
+        run: |
+          GITHUB_RUNNER_VERSION=$(<github_runner-version)
+          docker buildx build \
+            --build-arg GITHUB_RUNNER_VERSION=$GITHUB_RUNNER_VERSION \
+            --push \
+            --platform linux/arm/v7,linux/amd64 \
+            -t ${{ github.repository }}:latest \
+            -t ${{ github.repository }}:${IMAGE_TAG} .
