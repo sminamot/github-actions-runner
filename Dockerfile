@@ -21,6 +21,7 @@ RUN apt-get update \
         jq \
         wget \
         ca-certificates \
+        iputils-ping \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && useradd -m github \
