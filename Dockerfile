@@ -38,5 +38,7 @@ RUN wget -O- https://github.com/actions/runner/releases/download/v${GITHUB_RUNNE
 
 COPY --chown=github:github entrypoint.sh ./entrypoint.sh
 RUN sudo chmod u+x ./entrypoint.sh
+COPY --chown=github:github remove.sh ./remove.sh
+RUN sudo chmod u+x ./remove.sh
 
 ENTRYPOINT ["/home/github/entrypoint.sh"]

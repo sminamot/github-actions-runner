@@ -13,13 +13,4 @@ export RUNNER_TOKEN=$(echo $payload | jq .token --raw-output)
     --unattended \
     --replace
 
-remove() {
-    ./config.sh remove --unattended --token "${RUNNER_TOKEN}"
-}
-
-trap 'remove; exit 130' INT
-trap 'remove; exit 143' TERM
-
-./run.sh "$*" &
-
-wait $!
+./run.sh --once && ./remove.sh
