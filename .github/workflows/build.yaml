@@ -40,4 +40,4 @@ jobs:
           build-args: GITHUB_RUNNER_VERSION=${{ env.GITHUB_RUNNER_VERSION }}
           platforms: linux/arm/v7,linux/amd64
           push: true
-          tags: ${{ github.repository_owner }}/github-actions-runner:latest,${{ github.repository_owner }}/github-actions-runner:${{ env.IMAGE_TAG }}
+          tags: ${{ github.repository }}:latest,${{ github.repository }}:${{ env.IMAGE_TAG }}
